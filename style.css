@@ -6,6 +6,8 @@
     --component-border: rgba(255, 255, 255, 0.18);
     --button-bg: #fff;
     --button-text: #2575fc;
+    --content-bg: rgba(0, 0, 0, 0.2);
+    --details-bg: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="light"] {
@@ -16,6 +18,8 @@
     --component-border: rgba(0, 0, 0, 0.1);
     --button-bg: #2575fc;
     --button-text: #fff;
+    --content-bg: rgba(255, 255, 255, 0.8);
+    --details-bg: rgba(0, 0, 0, 0.05);
 }
 
 body {
@@ -28,11 +32,65 @@ body {
     background: linear-gradient(45deg, var(--background-start), var(--background-end));
     color: var(--text-color);
     transition: background 0.3s, color 0.3s;
+    padding: 2rem;
+}
+
+.content-wrapper {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
 }
 
 h1 {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     font-weight: 600;
+}
+
+.intro {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content-section {
+    background-color: var(--content-bg);
+    padding: 2rem;
+    border-radius: 15px;
+    margin: 2rem 0;
+    text-align: left;
+    transition: background-color 0.3s;
+}
+
+.content-section h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--component-border);
+    padding-bottom: 0.5rem;
+}
+
+.faq details {
+    background: var(--details-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: background-color 0.3s;
+}
+
+.faq summary {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--component-border);
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    font-size: 0.9rem;
 }
 
 .theme-switch-wrapper {
