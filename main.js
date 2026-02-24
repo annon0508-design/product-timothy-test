@@ -1,3 +1,25 @@
+const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+const currentTheme = localStorage.getItem('theme');
+
+function switchTheme(e) {
+    if (e.target.checked) {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (currentTheme === 'light') {
+        toggleSwitch.checked = true;
+    }
+}
+
+toggleSwitch.addEventListener('change', switchTheme, false);
+
 class LottoGenerator extends HTMLElement {
     constructor() {
         super();
@@ -24,16 +46,18 @@ class LottoGenerator extends HTMLElement {
             .wrapper {
                 padding: 30px;
                 border-radius: 15px;
-                background-color: rgba(255, 255, 255, 0.1);
+                background-color: var(--component-bg);
                 box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
                 backdrop-filter: blur(4px);
                 -webkit-backdrop-filter: blur(4px);
-                border: 1px solid rgba(255, 255, 255, 0.18);
+                border: 1px solid var(--component-border);
                 text-align: center;
+                transition: background-color 0.3s, border 0.3s;
             }
             h2 {
-                color: #fff;
+                color: var(--text-color);
                 margin-bottom: 20px;
+                transition: color 0.3s;
             }
             .numbers, .bonus-container {
                 display: flex;
@@ -51,23 +75,25 @@ class LottoGenerator extends HTMLElement {
                 align-items: center;
                 font-size: 24px;
                 font-weight: bold;
-                color: #fff;
+                color: #fff; /* Keep text white for contrast on colored circles */
                 animation: pop-in 0.5s ease-out forwards;
             }
             .bonus-container::before {
                 content: '+';
                 font-size: 24px;
                 margin-right: 10px;
+                color: var(--text-color);
+                transition: color 0.3s;
             }
             button {
                 padding: 15px 30px;
                 border: none;
                 border-radius: 10px;
-                background-color: #fff;
-                color: #2575fc;
+                background-color: var(--button-bg);
+                color: var(--button-text);
                 font-size: 18px;
                 cursor: pointer;
-                transition: transform 0.2s;
+                transition: transform 0.2s, background-color 0.3s, color 0.3s;
             }
             button:hover {
                 transform: scale(1.05);
@@ -94,11 +120,11 @@ class LottoGenerator extends HTMLElement {
     }
 
     getColor(number) {
-        if (number <= 10) return '#fbc400'; // Yellow
-        if (number <= 20) return '#69c8f2'; // Blue
-        if (number <= 30) return '#ff7272'; // Red
-        if (number <= 40) return '#aaa'; // Gray
-        return '#b0d840'; // Green
+        if (number <= 10) return '#fbc400';
+        if (number <= 20) return '#69c8f2';
+        if (number <= 30) return '#ff7272';
+        if (number <= 40) return '#aaa';
+        return '#b0d840';
     }
 
     generateNumbers(numbersContainer, bonusContainer) {
