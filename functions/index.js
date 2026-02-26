@@ -1,35 +1,26 @@
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-const { transcribeAudio } = require("./whisper");
+const { onCall } = require("firebase-functions/v2/https");
+const { initializeApp } = require("firebase-admin/app");
+const { getKeywords } = require("./keywords");
 
-admin.initializeApp();
+initializeApp();
 
-exports.processAudio = functions.storage
-  .object()
-  .onFinalize(async (object) => {
-    const filePath = object.name;
+exports.analyzeRecording = onCall((request) => {
+  const { fileContent, fileName } = request.data;
 
-    // Ensure we are only processing files in the 'audio/' directory
-    if (!filePath.startsWith("audio/")) {
-        console.log(`File ${filePath} is not in the audio directory, skipping.`);
-        return null;
-    }
+  // For now, we'll just log the file name and return a dummy analysis.
+  console.log(`Received file: ${fileName}`);
 
-    try {
-        const transcriptData = await transcribeAudio(filePath);
+  // In a real scenario, you would process the fileContent.
+  // Here, we'll use the placeholder keyword extraction.
+  const dummyText = "This is a dummy transcript based on the audio file.";
+  const keywords = getKeywords(dummyText);
 
-        // The document ID will be the file name without the 'audio/' prefix
-        const docId = filePath.split('/').pop();
-
-        await admin.firestore().collection("files").doc(docId).set({
-            filePath,
-            transcript: transcriptData.text,
-            segments: transcriptData.segments,
-            createdAt: new Date(),
-        });
-
-        console.log(`Successfully transcribed ${filePath} and saved to Firestore.`);
-    } catch (error) {
-        console.error(`Error processing ${filePath}:`, error);
-    }
+  return {
+    status: "success",
+    message: "File processed successfully.",
+    analysis: {
+      transcript: dummyText,
+      keywords: keywords,
+    },
+  };
 });

@@ -9,14 +9,13 @@ export const DEFAULT_KEYWORDS = [
   "확인", "증거", "녹음"
 ];
 
-// TODO: Replace with your actual Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    projectId: "voice-evidence-finder-app",
+    appId: "1:806555140137:web:3337f357c4f27ab4685c38",
+    storageBucket: "voice-evidence-finder-app.firebasestorage.app",
+    apiKey: "AIzaSyB53dKz2Dwd1dlG5A8VUY3SPLQ5NAFw_Mk",
+    authDomain: "voice-evidence-finder-app.firebaseapp.com",
+    messagingSenderId: "806555140137"
 };
 
 const app = initializeApp(firebaseConfig);
