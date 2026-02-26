@@ -99,7 +99,7 @@ export default function Result() {
           <header className="mb-8">
               <h1 className="text-5xl font-extrabold text-gray-800 tracking-tight">음성 분석 결과</h1>
               <div className="mt-2 flex items-center space-x-4">
-                <p className="text-gray-500">파일: {fileData.filePath}</p>
+                <p className="text-gray-500">파일명: {fileData.filePath.split('/').pop()}</p>
                 {fileData.pdfUrl && (
                     <a href={fileData.pdfUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-blue-600 hover:text-blue-800 hover:underline">
                       <svg className="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 2 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -115,7 +115,7 @@ export default function Result() {
                   {audioUrl && (
                       <audio ref={audioRef} src={audioUrl} controls className="w-full mb-6 rounded-md shadow-sm"></audio>
                   )}
-                  <h2 className="text-3xl font-bold mb-4 text-gray-700">전체 대본</h2>
+                  <h2 className="text-3xl font-bold mb-4 text-gray-700">전체 변환 내용</h2>
                   <div className="h-[60vh] overflow-y-auto pr-3 space-y-2">
                       {fileData.segments.map((seg, index) => (
                           <button key={index} onClick={() => playSegment(seg.start)} className="text-left w-full p-3 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -129,7 +129,7 @@ export default function Result() {
               {/* Right Column: Search & Results */}
               <aside className="space-y-8">
                 <div className="bg-white rounded-xl shadow-lg p-6">
-                    <h2 className="text-3xl font-bold mb-4 text-gray-700">키워드 검색</h2>
+                    <h2 className="text-3xl font-bold mb-4 text-gray-700">키워드 분석</h2>
                     <SearchBar onSearch={handleSearch} />
                     <div className="mt-4">
                         <p className="font-semibold text-gray-600 mb-2">추천 키워드</p>
