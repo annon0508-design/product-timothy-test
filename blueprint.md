@@ -34,7 +34,7 @@ A tool to quickly find legally meaningful statements inside recorded audio.
 
 ### 4.1 File Upload
 - Drag & Drop interface
-- Supported formats: mp3, wav, m4a
+- Supported formats: mp3, wav, m4a, mp4
 - Max length: 30 minutes (MVP constraint)
 
 ### 4.2 Transcription (STT)

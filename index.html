@@ -1,41 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Evidence Finder</title>
+    <title>음성 증거 분석기</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Voice Evidence Finder</h1>
+        <h1>음성 증거 분석기</h1>
     </header>
     <main>
         <div id="upload-container">
-            <h2>Upload Audio File</h2>
+            <h2>오디오 파일 업로드</h2>
             <div id="drop-zone">
-                <p>Drag & drop your audio file here (mp3, wav, m4a)</p>
+                <p>오디오 또는 비디오 파일을 이곳에 드래그 앤 드롭하세요 (mp3, wav, m4a, mp4)</p>
             </div>
             <div id="upload-progress-container">
                 <div id="upload-progress-bar"></div>
             </div>
         </div>
         <div id="transcription-container">
-            <h2>Transcription</h2>
+            <h2>음성 변환 내용</h2>
             <div id="transcript"></div>
         </div>
         <div id="search-container">
-            <h2>Search Keywords</h2>
-            <input type="text" id="search-input" placeholder="Enter keyword...">
-            <button id="search-button">Search</button>
+            <h2>키워드 검색</h2>
+            <input type="text" id="search-input" placeholder="키워드를 입력하세요...">
+            <button id="search-button">검색</button>
             <div id="search-results"></div>
         </div>
         <div id="player-container">
-            <h2>Audio Player</h2>
+            <h2>오디오 플레이어</h2>
             <audio id="audio-player" controls></audio>
         </div>
         <div id="export-container">
-            <button id="export-pdf">Export as PDF</button>
+            <button id="export-pdf">PDF로 내보내기</button>
         </div>
     </main>
     <script src="main.js" type="module"></script>
