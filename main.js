@@ -1,60 +1,59 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getStorage, ref, uploadBytesResumable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 
-export const DEFAULT_KEYWORDS = [
-  "돈", "입금", "송금", "보내겠다", "줄게",
-  "계약", "약속", "합의", "동의",
-  "책임", "변상", "환불", "갚겠다",
-  "언제", "기한", "날짜",
-  "확인", "증거", "녹음"
-];
-
+// Your web app's Firebase configuration
 const firebaseConfig = {
-    projectId: "voice-evidence-finder-app",
-    appId: "1:806555140137:web:3337f357c4f27ab4685c38",
-    storageBucket: "voice-evidence-finder-app.firebasestorage.app",
-    apiKey: "AIzaSyB53dKz2Dwd1dlG5A8VUY3SPLQ5NAFw_Mk",
-    authDomain: "voice-evidence-finder-app.firebaseapp.com",
-    messagingSenderId: "806555140137"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-const dropZone = document.getElementById('drop-zone');
-
-dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.classList.add('dragover');
-});
-
-dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('dragover');
-});
-
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-        uploadFile(files[0]);
+export function uploadFile(file, onProgress, onError, onSuccess) {
+    if (!file) {
+        if (onError) onError("파일이 없습니다.");
+        return;
     }
-});
 
-function uploadFile(file) {
-    const storageRef = ref(storage, 'audio/' + file.name);
+    const storageRef = ref(storage, 'uploads/' + file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on('state_changed',
         (snapshot) => {
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log('Upload is ' + progress + '% done');
+            if (onProgress) onProgress(progress);
         },
         (error) => {
+            // Handle unsuccessful uploads
             console.error("Upload failed:", error);
+            if (onError) {
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                        onError("Permission denied.");
+                        break;
+                    case 'storage/canceled':
+                        onError("Upload canceled.");
+                        break;
+                    case 'storage/unknown':
+                        onError("An unknown error occurred.");
+                        break;
+                    default:
+                        onError("Upload failed.");
+                }
+            }
         },
         () => {
+            // Handle successful uploads on complete
             console.log("Upload successful");
+            if (onSuccess) onSuccess();
         }
     );
 }
