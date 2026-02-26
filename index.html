@@ -3,64 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotto Number Generator - Your Lucky Numbers</title>
-    <meta name="description" content="Generate random lottery numbers for your chance to win. Explore lottery statistics, tips, and frequently asked questions.">
+    <title>Voice Evidence Finder</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider round"></div>
-        </label>
-    </div>
-
-    <main class="content-wrapper">
-        <h1>Lotto Number Extraction</h1>
-        <p class="intro">
-            Welcome to the Lotto Number Generator! This tool is designed to help you pick random, unbiased numbers for your next lottery ticket. While it doesn't guarantee a win, it provides a fun and easy way to select your numbers. 
-        </p>
-
-        <lotto-generator></lotto-generator>
-
-        <section class="content-section">
-            <h2>About the Lottery</h2>
-            <p>
-                Lotteries are a form of gambling that involves the drawing of numbers for a prize. They are run by governments and private organizations around the world. The funds raised from lotteries are often used to support public services such as education, infrastructure, and healthcare.
-            </p>
-        </section>
-
-        <section class="content-section faq">
-            <h2>Frequently Asked Questions (FAQ)</h2>
-            <details>
-                <summary>How are the numbers generated?</summary>
-                <p>Our system uses a pseudorandom number generator (PRNG) algorithm to ensure that the numbers are as random as possible. Each number is selected independently and has an equal chance of being chosen.</p>
-            </details>
-            <details>
-                <summary>Does this tool improve my chances of winning?</summary>
-                <p>No, this tool is for entertainment purposes only. The lottery is a game of chance, and the odds of winning are the same for every number combination. Using this generator does not increase your statistical probability of winning.</p>
-            </details>
-            <details>
-                <summary>What are the most common lottery numbers?</summary>
-                <p>Statistically, over a long period, all numbers should be drawn roughly the same number of times. However, in the short term, some numbers may appear more frequently than others. This is purely due to statistical variance and does not indicate that these numbers are more likely to be drawn in the future.</p>
-            </details>
-        </section>
-
-        <section class="content-section disclaimer">
-            <h2>Disclaimer</h2>
-            <p>
-                This website is for informational and entertainment purposes only. The lottery number generator is not affiliated with or endorsed by any official lottery organization. The numbers generated are random and do not guarantee a win. Please play responsibly and within your means.
-            </p>
-        </section>
+    <header>
+        <h1>Voice Evidence Finder</h1>
+    </header>
+    <main>
+        <div id="upload-container">
+            <h2>Upload Audio File</h2>
+            <div id="drop-zone">
+                <p>Drag & drop your audio file here (mp3, wav, m4a)</p>
+            </div>
+            <div id="upload-progress-container">
+                <div id="upload-progress-bar"></div>
+            </div>
+        </div>
+        <div id="transcription-container">
+            <h2>Transcription</h2>
+            <div id="transcript"></div>
+        </div>
+        <div id="search-container">
+            <h2>Search Keywords</h2>
+            <input type="text" id="search-input" placeholder="Enter keyword...">
+            <button id="search-button">Search</button>
+            <div id="search-results"></div>
+        </div>
+        <div id="player-container">
+            <h2>Audio Player</h2>
+            <audio id="audio-player" controls></audio>
+        </div>
+        <div id="export-container">
+            <button id="export-pdf">Export as PDF</button>
+        </div>
     </main>
-
-    <footer>
-        <p>&copy; 2023 Lotto Number Generator. All Rights Reserved.</p>
-    </footer>
-
     <script src="main.js" type="module"></script>
 </body>
 </html>

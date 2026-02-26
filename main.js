@@ -1,161 +1,61 @@
-const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
-const currentTheme = localStorage.getItem('theme');
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getStorage, ref, uploadBytesResumable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
-function switchTheme(e) {
-    if (e.target.checked) {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
+export const DEFAULT_KEYWORDS = [
+  "돈", "입금", "송금", "보내겠다", "줄게",
+  "계약", "약속", "합의", "동의",
+  "책임", "변상", "환불", "갚겠다",
+  "언제", "기한", "날짜",
+  "확인", "증거", "녹음"
+];
+
+// TODO: Replace with your actual Firebase configuration
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+const dropZone = document.getElementById('drop-zone');
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        uploadFile(files[0]);
     }
-}
+});
 
-if (currentTheme) {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    if (currentTheme === 'light') {
-        toggleSwitch.checked = true;
-    }
-}
+function uploadFile(file) {
+    const storageRef = ref(storage, 'audio/' + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-toggleSwitch.addEventListener('change', switchTheme, false);
-
-class LottoGenerator extends HTMLElement {
-    constructor() {
-        super();
-        const shadow = this.attachShadow({ mode: 'open' });
-
-        const wrapper = document.createElement('div');
-        wrapper.setAttribute('class', 'wrapper');
-
-        const title = document.createElement('h2');
-        title.textContent = 'This Week\'s Winning Numbers';
-
-        const numbersContainer = document.createElement('div');
-        numbersContainer.setAttribute('class', 'numbers');
-        
-        const bonusContainer = document.createElement('div');
-        bonusContainer.setAttribute('class', 'bonus-container');
-
-        const button = document.createElement('button');
-        button.textContent = 'Generate Numbers';
-        button.addEventListener('click', () => this.generateNumbers(numbersContainer, bonusContainer));
-
-        const style = document.createElement('style');
-        style.textContent = `
-            .wrapper {
-                padding: 30px;
-                border-radius: 15px;
-                background-color: var(--component-bg);
-                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-                backdrop-filter: blur(4px);
-                -webkit-backdrop-filter: blur(4px);
-                border: 1px solid var(--component-border);
-                text-align: center;
-                transition: background-color 0.3s, border 0.3s;
-            }
-            h2 {
-                color: var(--text-color);
-                margin-bottom: 20px;
-                transition: color 0.3s;
-            }
-            .numbers, .bonus-container {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                margin: 20px 0;
-            }
-            .number, .bonus-number {
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 24px;
-                font-weight: bold;
-                color: #fff; /* Keep text white for contrast on colored circles */
-                animation: pop-in 0.5s ease-out forwards;
-            }
-            .bonus-container::before {
-                content: '+';
-                font-size: 24px;
-                margin-right: 10px;
-                color: var(--text-color);
-                transition: color 0.3s;
-            }
-            button {
-                padding: 15px 30px;
-                border: none;
-                border-radius: 10px;
-                background-color: var(--button-bg);
-                color: var(--button-text);
-                font-size: 18px;
-                cursor: pointer;
-                transition: transform 0.2s, background-color 0.3s, color 0.3s;
-            }
-            button:hover {
-                transform: scale(1.05);
-            }
-
-            @keyframes pop-in {
-                0% {
-                    transform: scale(0);
-                }
-                100% {
-                    transform: scale(1);
-                }
-            }
-        `;
-
-        shadow.appendChild(style);
-        shadow.appendChild(wrapper);
-        wrapper.appendChild(title);
-        wrapper.appendChild(numbersContainer);
-        wrapper.appendChild(bonusContainer);
-        wrapper.appendChild(button);
-
-        this.generateNumbers(numbersContainer, bonusContainer);
-    }
-
-    getColor(number) {
-        if (number <= 10) return '#fbc400';
-        if (number <= 20) return '#69c8f2';
-        if (number <= 30) return '#ff7272';
-        if (number <= 40) return '#aaa';
-        return '#b0d840';
-    }
-
-    generateNumbers(numbersContainer, bonusContainer) {
-        numbersContainer.innerHTML = '';
-        bonusContainer.innerHTML = '';
-
-        const numbers = new Set();
-        while (numbers.size < 7) {
-            numbers.add(Math.floor(Math.random() * 45) + 1);
+    uploadTask.on('state_changed',
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+        },
+        (error) => {
+            console.error("Upload failed:", error);
+        },
+        () => {
+            console.log("Upload successful");
         }
-
-        const sortedNumbers = [...numbers].sort((a, b) => a - b);
-        const mainNumbers = sortedNumbers.slice(0, 6);
-        const bonusNumber = sortedNumbers[6];
-
-        mainNumbers.forEach((number, index) => {
-            const numberDiv = document.createElement('div');
-            numberDiv.setAttribute('class', 'number');
-            numberDiv.textContent = number;
-            numberDiv.style.backgroundColor = this.getColor(number);
-            numberDiv.style.animationDelay = `${index * 100}ms`;
-            numbersContainer.appendChild(numberDiv);
-        });
-        
-        const bonusDiv = document.createElement('div');
-        bonusDiv.setAttribute('class', 'bonus-number');
-        bonusDiv.textContent = bonusNumber;
-        bonusDiv.style.backgroundColor = this.getColor(bonusNumber);
-        bonusDiv.style.animationDelay = `600ms`;
-        bonusContainer.appendChild(bonusDiv);
-    }
+    );
 }
-
-customElements.define('lotto-generator', LottoGenerator);
