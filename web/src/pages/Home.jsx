@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, uploadBytes } from "firebase/storage";
 import { storage } from '../services/firebase';
@@ -8,6 +8,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const handleFileChange = async (files) => {
     const file = files[0];
@@ -31,6 +32,12 @@ export default function Home() {
       console.error("업로드 실패:", err);
       setError("파일 업로드에 실패했습니다. 다시 시도해주세요.");
       setIsUploading(false);
+    }
+  };
+
+  const handleAreaClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
@@ -61,21 +68,29 @@ export default function Home() {
       </div>
 
       <div className="w-full max-w-lg px-4">
-        <label 
-          htmlFor="file-upload"
+        <div 
+          onClick={handleAreaClick}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           className={`flex justify-center items-center w-full h-64 px-6 transition-all duration-300 bg-white border-2 border-dashed rounded-xl cursor-pointer ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}>
-          <div className="text-center">
+          <div className="text-center pointer-events-none">
             <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
               <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <p className="mt-4 text-lg font-semibold text-gray-600">파일을 드래그 앤 드롭하거나 클릭하여 업로드</p>
             <p className="mt-1 text-sm text-gray-500">MP3, WAV, M4A 등 오디오 파일</p>
-            <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={(e) => handleFileChange(e.target.files)} disabled={isUploading} />
+            <input 
+              ref={fileInputRef} 
+              id="file-upload"
+              name="file-upload" 
+              type="file" 
+              className="sr-only" 
+              onChange={(e) => handleFileChange(e.target.files)} 
+              disabled={isUploading} 
+            />
           </div>
-        </label>
+        </div>
       </div>
 
       {isUploading && (
